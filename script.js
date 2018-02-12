@@ -69,23 +69,34 @@
       notifications.active = ap37.notificationsActive();
       if (notifications.active) {
         var nots = ap37.getNotifications();
+        notifications.list = nots;
         for (var i = 0; i < 3; i++) {
           var y = i + 2;
           background.printPattern(0, w, y);
           if (i < nots.length) {
-            var name = nots[i].name;
             nots[i].y = y;
             if (i == 2 && nots.length > 3) {
-              var length = Math.min(name.length, w - 10);
-              name = name.substring(0, length) + "... +" +
-                (nots.length - 3);
+              nots[i].ellipsis = true;
             }
-            print(0, y, name);
+            notifications.printNotification(nots[i], false);
           }
         }
-        notifications.list = nots;
       } else {
         print(0, 3, 'Activate notifications');
+      }
+    },
+    printNotification: function(notification, highlight) {
+      var name = notification.name;
+      if (notification.ellipsis) {
+        var length = Math.min(name.length, w - 10);
+        name = name.substring(0, length) + "... +" +
+          (notifications.list.length - 3);
+      }
+      print(0, notification.y, name, highlight ? '#ff3333' : '#ffffff');
+      if (highlight) {
+        setTimeout(function() {
+          notifications.printNotification(notification, false);
+        }, 3000);
       }
     },
     init: function() {
@@ -96,6 +107,7 @@
       if (notifications.active) {
         for (var i = 0; i < notifications.list.length; i++) {
           if (notifications.list[i].y === y) {
+            notifications.printNotification(notifications.list[i], true);
             ap37.openNotification(notifications.list[i].id);
             return;
           }
@@ -120,21 +132,31 @@
     printPage: function(page) {
       var appPos = page * apps.appsPerPage;
 
-      for (var y = apps.topMargin; y < apps.topMargin + apps.lines *
-        apps.lineHeight; y += apps.lineHeight) {
-        for (var x = 0; x + apps.appWidth <= w; x += apps.appWidth) {
+      for (var x = 0; x + apps.appWidth <= w; x += apps.appWidth) {
+        for (var y = apps.topMargin; y < apps.topMargin + apps.lines *
+          apps.lineHeight; y += apps.lineHeight) {
           background.printPattern(x, x + apps.appWidth, y);
           if (appPos < apps.list.length) {
             var app = apps.list[appPos];
             app.y = y;
             app.x0 = x;
             app.xf = x + apps.appWidth;
-            print(x, y, '_' +
-              app.name.substring(0, apps.appWidth - 2), '#999999');
-            print(x + 1, y, app.name.substring(0, 1), '#ffffff');
+            apps.printApp(app, false);
             appPos++;
           }
         }
+      }
+    },
+    printApp: function(app, highlight) {
+      print(app.x0, app.y, '_' +
+        app.name.substring(0, apps.appWidth - 2),
+        highlight ? '#ff3333' : '#999999');
+      if (highlight) {
+        setTimeout(function() {
+          apps.printApp(app, false);
+        }, 3000);
+      } else {
+        print(app.x0 + 1, app.y, app.name.substring(0, 1), '#ffffff');
       }
     },
     init: function() {
@@ -168,6 +190,7 @@
         var app = apps.list[i];
         if (y >= app.y && y <= app.y + 1 &&
           x >= app.x0 && x <= app.xf) {
+          apps.printApp(app, true);
           ap37.openApp(app.id);
           return;
         }

@@ -96,7 +96,7 @@
       if (highlight) {
         setTimeout(function() {
           notifications.printNotification(notification, false);
-        }, 3000);
+        }, 1000);
       }
     },
     init: function() {
@@ -154,7 +154,7 @@
       if (highlight) {
         setTimeout(function() {
           apps.printApp(app, false);
-        }, 3000);
+        }, 1000);
       } else {
         print(app.x0 + 1, app.y, app.name.substring(0, 1), '#ffffff');
       }
@@ -258,7 +258,7 @@
       if (highlight) {
         setTimeout(function() {
           transmissions.printTransmission(transmission, false);
-        }, 3000);
+        }, 1000);
       }
     },
     init: function() {

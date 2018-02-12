@@ -209,30 +209,34 @@
   var transmissions = {
     list: [],
     update: function() {
-      get('https://dangeru.us/cyb', function(response) {
-        var tags = response.split('<a '),
-          hrefMatch = 'href="/cyb/thread/',
+      get('https://dangeru.us/api/v2/board/cyb', function(response) {
+        var result = JSON.parse(response),
+          line = h - 4,
           t = transmissions;
         t.list = [];
-        for (var i = 0, line = h - 4; i < tags.length && t.list.length <
-          3; i++) {
-          var tag = tags[i],
-            idPos = tag.indexOf(hrefMatch);
-          if (idPos !== -1 && tag.indexOf('sticky-') === -1) {
-            t.list.push({
-              url: 'https://dangeru.us/cyb/thread/' +
-                tag.slice(idPos + hrefMatch.length).slice(0, tag.indexOf(
-                  '"')),
+        for (var i = 0; i < result.length && t.list.length < 3; i++) {
+          if (!result[i].sticky) {
+            var transmission = {
+              title: result[i].title,
+              url: 'https://dangeru.us/cyb/thread/' + result[i].post_id,
               y: line
-            });
-            var title = tag.slice(tag.indexOf('>') + 1,
-              tag.indexOf('<')).trim();
+            };
+            t.list.push(transmission);
             background.printPattern(0, w, line);
-            print(0, line, title);
+            t.printTransmission(transmission, false);
             line++;
           }
         }
       });
+    },
+    printTransmission: function(transmission, highlight) {
+      print(0, transmission.y, transmission.title,
+        highlight ? '#ff3333' : '#ffffff');
+      if (highlight) {
+        setTimeout(function() {
+          transmissions.printTransmission(transmission, false);
+        }, 3000);
+      }
     },
     init: function() {
       print(0, h - 5, '// Transmissions');
@@ -242,6 +246,7 @@
     onTouch: function(x, y) {
       for (var i = 0; i < transmissions.list.length; i++) {
         if (transmissions.list[i].y === y) {
+          transmissions.printTransmission(transmissions.list[i], true);
           ap37.openLink(transmissions.list[i].url);
           return;
         }

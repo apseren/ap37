@@ -1,9 +1,13 @@
 (function script() {
   'use strict';
-  var w = ap37.getScreenWidth(),
-    h = ap37.getScreenHeight();
+  var w, h;
 
   function init() {
+    ap37.setTextSize(11);
+
+    w = ap37.getScreenWidth();
+    h = ap37.getScreenHeight();
+
     background.init();
     print(0, 0, 'ap37-c7fe3fc0');
     time.init();
@@ -13,13 +17,12 @@
     transmissions.init();
     print(w - 3, h - 1, 'EOF');
 
-    wordGlitch.init();
-    lineGlitch.init();
-
     ap37.setOnTouchListener(function(x, y) {
       notifications.onTouch(x, y);
       apps.onTouch(x, y);
       transmissions.onTouch(x, y);
+      lineGlitch.onTouch(x, y);
+      wordGlitch.onTouch(x, y);
     });
   }
 
@@ -172,6 +175,7 @@
         apps.appsPerLine = Math.floor(w / apps.appWidth);
         apps.isNextPageButtonVisible = true;
         print(w - 4, h - 9, '>>>');
+        print(w - 4, h - 8, '>>>');
       } else {
         apps.isNextPageButtonVisible = false;
         background.printPattern(w - 4, w, h - 9);
@@ -268,7 +272,8 @@
     },
     onTouch: function(x, y) {
       for (var i = 0; i < transmissions.list.length; i++) {
-        if (transmissions.list[i].y === y) {
+        if (transmissions.list[i].y === y &&
+          x <= transmissions.list[i].title.length) {
           transmissions.printTransmission(transmissions.list[i], true);
           ap37.openLink(transmissions.list[i].url);
           return;
@@ -283,6 +288,8 @@
     x: 0,
     y: 0,
     text: [],
+    active: false,
+    intervalId: null,
     update: function() {
       var g = wordGlitch;
       if (g.tick === 0) { // generate new glitch
@@ -303,19 +310,29 @@
           background.bufferColors[g.y].slice(g.x, g.x + g.length)
         );
         g.tick = 0;
+        if (!wordGlitch.active) {
+          clearInterval(wordGlitch.intervalId);
+        }
       } else {
         ap37.print(g.x, g.y, g.text[g.tick], '#666666');
         g.tick++;
       }
     },
-    init: function() {
-      setInterval(wordGlitch.update, 100);
+    onTouch: function(x, y) {
+      if (x > w - 6 && y > h - 4) {
+        wordGlitch.active = !wordGlitch.active;
+        if (wordGlitch.active) {
+          wordGlitch.intervalId = setInterval(wordGlitch.update, 100);
+        }
+      }
     }
   };
 
   var lineGlitch = {
     tick: 0,
     line: 0,
+    active: false,
+    intervalId: null,
     update: function() {
       var g = lineGlitch;
       if (g.tick === 0) { // shift line
@@ -345,10 +362,18 @@
           0, g.line, background.buffer[g.line],
           background.bufferColors[g.line]);
         g.tick = 0;
+        if (!lineGlitch.active) {
+          clearInterval(lineGlitch.intervalId);
+        }
       }
     },
-    init: function() {
-      setInterval(lineGlitch.update, 200);
+    onTouch: function(x, y) {
+      if (x > w - 6 && y > h - 4) {
+        lineGlitch.active = !lineGlitch.active;
+        if (lineGlitch.active) {
+          lineGlitch.intervalId = setInterval(lineGlitch.update, 200);
+        }
+      }
     }
   };
 

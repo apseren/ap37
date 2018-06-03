@@ -11,6 +11,7 @@
     background.init();
     print(0, 0, 'ap37-c7fe3fc0');
     time.init();
+    battery.init();
     notifications.init();
     apps.init();
     markets.init();
@@ -62,6 +63,17 @@
     init: function() {
       time.update();
       setInterval(time.update, 60000);
+    }
+  };
+
+  var battery = {
+    update: function() {
+      print(w - 17, 0,
+        leftPad(ap37.getBatteryLevel(), 3, ' '));
+    },
+    init: function() {
+      battery.update();
+      setInterval(battery.update, 60000);
     }
   };
 

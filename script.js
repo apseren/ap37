@@ -18,7 +18,7 @@
     transmissions.init();
     print(w - 3, h - 1, 'EOF');
 
-    ap37.setOnTouchListener(function(x, y) {
+    ap37.setOnTouchListener(function (x, y) {
       notifications.onTouch(x, y);
       apps.onTouch(x, y);
       transmissions.onTouch(x, y);
@@ -33,12 +33,12 @@
     buffer: [],
     bufferColors: [],
     pattern: '',
-    printPattern: function(x0, xf, y) {
+    printPattern: function (x0, xf, y) {
       print(x0, y,
         background.pattern.substring(y * w + x0, y * w + xf),
         '#333333');
     },
-    init: function() {
+    init: function () {
       background.pattern = rightPad(script.toString(), h * w, ' ');
 
       for (var i = 0; i < h; i++) {
@@ -51,7 +51,7 @@
   };
 
   var time = {
-    update: function() {
+    update: function () {
       var d = new Date();
       var time = d.getFullYear() +
         leftPad((d.getMonth() + 1).toString(), 2, '0') +
@@ -60,18 +60,18 @@
         leftPad(d.getMinutes().toString(), 2, '0');
       print(w - 13, 0, time);
     },
-    init: function() {
+    init: function () {
       time.update();
       setInterval(time.update, 60000);
     }
   };
 
   var battery = {
-    update: function() {
+    update: function () {
       print(w - 17, 0,
         leftPad(ap37.getBatteryLevel(), 3, ' '));
     },
-    init: function() {
+    init: function () {
       battery.update();
       setInterval(battery.update, 60000);
     }
@@ -80,7 +80,7 @@
   var notifications = {
     list: [],
     active: false,
-    update: function() {
+    update: function () {
       notifications.active = ap37.notificationsActive();
       if (notifications.active) {
         var nots = ap37.getNotifications();
@@ -100,7 +100,7 @@
         print(0, 3, 'Activate notifications');
       }
     },
-    printNotification: function(notification, highlight) {
+    printNotification: function (notification, highlight) {
       var name = notification.name;
       if (notification.ellipsis) {
         var length = Math.min(name.length, w - 10);
@@ -109,16 +109,16 @@
       }
       print(0, notification.y, name, highlight ? '#ff3333' : '#ffffff');
       if (highlight) {
-        setTimeout(function() {
+        setTimeout(function () {
           notifications.printNotification(notification, false);
         }, 1000);
       }
     },
-    init: function() {
+    init: function () {
       ap37.setOnNotificationsListener(notifications.update);
       notifications.update();
     },
-    onTouch: function(x, y) {
+    onTouch: function (x, y) {
       if (notifications.active) {
         for (var i = 0; i < notifications.list.length; i++) {
           if (notifications.list[i].y === y) {
@@ -144,12 +144,12 @@
     appsPerPage: 0,
     currentPage: 0,
     isNextPageButtonVisible: false,
-    printPage: function(page) {
+    printPage: function (page) {
       var appPos = page * apps.appsPerPage;
 
       for (var x = 0; x + apps.appWidth <= w; x += apps.appWidth) {
         for (var y = apps.topMargin; y < apps.topMargin + apps.lines *
-          apps.lineHeight; y += apps.lineHeight) {
+        apps.lineHeight; y += apps.lineHeight) {
           background.printPattern(x, x + apps.appWidth, y);
           if (appPos < apps.list.length) {
             var app = apps.list[appPos];
@@ -162,19 +162,19 @@
         }
       }
     },
-    printApp: function(app, highlight) {
+    printApp: function (app, highlight) {
       print(app.x0, app.y, '_' +
         app.name.substring(0, apps.appWidth - 2),
         highlight ? '#ff3333' : '#999999');
       if (highlight) {
-        setTimeout(function() {
+        setTimeout(function () {
           apps.printApp(app, false);
         }, 1000);
       } else {
         print(app.x0 + 1, app.y, app.name.substring(0, 1), '#ffffff');
       }
     },
-    init: function() {
+    init: function () {
       apps.list = ap37.getApps();
       apps.lines = Math.floor(
         (h - apps.topMargin - apps.bottomMargin) / apps.lineHeight);
@@ -200,9 +200,9 @@
 
       ap37.setOnAppsListener(apps.init);
     },
-    onTouch: function(x, y) {
+    onTouch: function (x, y) {
       for (var i = apps.currentPage * apps.appsPerPage; i <
-        apps.list.length; i++) {
+      apps.list.length; i++) {
         var app = apps.list[i];
         if (y >= app.y && y <= app.y + 1 &&
           x >= app.x0 && x <= app.xf) {
@@ -224,21 +224,21 @@
   };
 
   var markets = {
-    update: function() {
-      get('https://api.cryptowat.ch/markets/prices', function(response) {
+    update: function () {
+      get('https://api.cryptowat.ch/markets/prices', function (response) {
         var result = JSON.parse(response).result,
           marketString =
-          'BTC' + Math.floor(result['kraken:btcusd']) +
-          ' BCH' + Math.floor(result['kraken:bchusd']) +
-          ' ETH' + Math.floor(result['kraken:ethusd']) +
-          ' ETC' + Math.floor(result['kraken:etcusd']) +
-          ' LTC' + Math.floor(result['kraken:ltcusd']) +
-          ' ZEC' + Math.floor(result['kraken:zecusd']);
+            'BTC' + Math.floor(result['kraken:btcusd']) +
+            ' BCH' + Math.floor(result['kraken:bchusd']) +
+            ' ETH' + Math.floor(result['kraken:ethusd']) +
+            ' ETC' + Math.floor(result['kraken:etcusd']) +
+            ' LTC' + Math.floor(result['kraken:ltcusd']) +
+            ' ZEC' + Math.floor(result['kraken:zecusd']);
         background.printPattern(0, w, h - 7);
         print(0, h - 7, marketString);
       });
     },
-    init: function() {
+    init: function () {
       print(0, h - 8, '// Markets');
       markets.update();
       setInterval(markets.update, 60000);
@@ -247,8 +247,8 @@
 
   var transmissions = {
     list: [],
-    update: function() {
-      get('https://dangeru.us/api/v2/board/cyb', function(response) {
+    update: function () {
+      get('https://dangeru.us/api/v2/board/cyb', function (response) {
         var result = JSON.parse(response),
           line = h - 4,
           t = transmissions;
@@ -268,21 +268,21 @@
         }
       });
     },
-    printTransmission: function(transmission, highlight) {
+    printTransmission: function (transmission, highlight) {
       print(0, transmission.y, transmission.title,
         highlight ? '#ff3333' : '#ffffff');
       if (highlight) {
-        setTimeout(function() {
+        setTimeout(function () {
           transmissions.printTransmission(transmission, false);
         }, 1000);
       }
     },
-    init: function() {
+    init: function () {
       print(0, h - 5, '// Transmissions');
       transmissions.update();
       setInterval(transmissions.update, 3600000);
     },
-    onTouch: function(x, y) {
+    onTouch: function (x, y) {
       for (var i = 0; i < transmissions.list.length; i++) {
         if (transmissions.list[i].y === y &&
           x <= transmissions.list[i].title.length) {
@@ -302,7 +302,7 @@
     text: [],
     active: false,
     intervalId: null,
-    update: function() {
+    update: function () {
       var g = wordGlitch;
       if (g.tick === 0) { // generate new glitch
         g.length = 5 + Math.floor(Math.random() * 6);
@@ -330,7 +330,7 @@
         g.tick++;
       }
     },
-    onTouch: function(x, y) {
+    onTouch: function (x, y) {
       if (x > w - 6 && y > h - 4) {
         wordGlitch.active = !wordGlitch.active;
         if (wordGlitch.active) {
@@ -345,7 +345,7 @@
     line: 0,
     active: false,
     intervalId: null,
-    update: function() {
+    update: function () {
       var g = lineGlitch;
       if (g.tick === 0) { // shift line
         g.line = 1 + Math.floor(Math.random() * h - 1);
@@ -364,8 +364,8 @@
             leftPad(background.buffer[g.line]
               .substring(0, w - offset), w, ' '),
             arrayFill('#ffffff', offset)
-            .concat(background.bufferColors[g.line]
-              .slice(0, w - offset))
+              .concat(background.bufferColors[g.line]
+                .slice(0, w - offset))
           );
         }
         g.tick++;
@@ -379,7 +379,7 @@
         }
       }
     },
-    onTouch: function(x, y) {
+    onTouch: function (x, y) {
       if (x > w - 6 && y > h - 4) {
         lineGlitch.active = !lineGlitch.active;
         if (lineGlitch.active) {
@@ -404,10 +404,10 @@
   function get(url, callback) {
     var xhr = new XMLHttpRequest();
     xhr.open('GET', url, true);
-    xhr.onload = function() {
+    xhr.onload = function () {
       if (xhr.status === 200) {
         callback(xhr.response)
-      };
+      }
     }
     xhr.send();
   }

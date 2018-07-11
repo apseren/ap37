@@ -9,7 +9,7 @@
     h = ap37.getScreenHeight();
 
     background.init();
-    print(0, 0, 'ap37-c7fe3fc0');
+    print(0, 0, 'ap37-ec14c53e');
     time.init();
     battery.init();
     notifications.init();
@@ -39,7 +39,7 @@
         '#333333');
     },
     init: function () {
-      background.pattern = rightPad(script.toString(), h * w, ' ');
+      background.pattern = rightPad(script, h * w, ' ');
 
       for (var i = 0; i < h; i++) {
         background.buffer.push(background.pattern.substr(i * w, w));
@@ -54,10 +54,10 @@
     update: function () {
       var d = new Date();
       var time = d.getFullYear() +
-        leftPad((d.getMonth() + 1).toString(), 2, '0') +
-        leftPad(d.getDate().toString(), 2, '0') + ' ' +
-        leftPad(d.getHours().toString(), 2, '0') +
-        leftPad(d.getMinutes().toString(), 2, '0');
+        leftPad(d.getMonth() + 1, 2, '0') +
+        leftPad(d.getDate(), 2, '0') + ' ' +
+        leftPad(d.getHours(), 2, '0') +
+        leftPad(d.getMinutes(), 2, '0');
       print(w - 13, 0, time);
     },
     init: function () {
@@ -408,16 +408,18 @@
       if (xhr.status === 200) {
         callback(xhr.response)
       }
-    }
+    };
     xhr.send();
   }
 
   function leftPad(str, newLength, char) {
+    str = str.toString();
     return newLength > str.length ?
       new Array(newLength - str.length + 1).join(char) + str : str;
   }
 
   function rightPad(str, newLength, char) {
+    str = str.toString();
     return newLength > str.length ?
       str + new Array(newLength - str.length + 1).join(char) : str;
   }

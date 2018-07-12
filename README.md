@@ -37,8 +37,14 @@ ap37.getScreenWidth(); // returns a number
 ap37.getScreenHeight(); // returns a number
 ```
 
+### getDate()
+Returns the current date. Useful to avoid Android WebView timezone bug: https://bugs.chromium.org/p/chromium/issues/detail?id=520783 
+```javascript
+ap37.getDate(); // returns an object: {year: 2018, month: 7, day: 12, hour: 1, minute: 2, second: 49}
+```
+
 ### getBatteryLevel()
-Returns the battery level in a number ranging from 0 to 100.
+Returns the battery level in a number ranging from 0 to 100. 
 ```javascript
 ap37.getBatteryLevel(); // returns a number
 ```

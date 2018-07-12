@@ -52,12 +52,10 @@
 
   var time = {
     update: function () {
-      var d = new Date();
-      var time = d.getFullYear() +
-        leftPad(d.getMonth() + 1, 2, '0') +
-        leftPad(d.getDate(), 2, '0') + ' ' +
-        leftPad(d.getHours(), 2, '0') +
-        leftPad(d.getMinutes(), 2, '0');
+      var d = ap37.getDate();
+      var time = d.year +
+        leftPad(d.month, 2, '0') + leftPad(d.day, 2, '0') + ' ' +
+        leftPad(d.hour, 2, '0') + leftPad(d.minute, 2, '0');
       print(w - 13, 0, time);
     },
     init: function () {

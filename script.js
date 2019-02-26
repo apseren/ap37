@@ -227,12 +227,12 @@
         try {
           var result = JSON.parse(response).result,
             marketString =
-              'BTC' + Math.floor(result['kraken:btcusd']) +
-              ' BCH' + Math.floor(result['kraken:bchusd']) +
-              ' ETH' + Math.floor(result['kraken:ethusd']) +
-              ' ETC' + Math.floor(result['kraken:etcusd']) +
-              ' LTC' + Math.floor(result['kraken:ltcusd']) +
-              ' ZEC' + Math.floor(result['kraken:zecusd']);
+              'BTC' + Math.floor(result['market:kraken:btcusd']) +
+              ' BCH' + Math.floor(result['market:kraken:bchusd']) +
+              ' ETH' + Math.floor(result['market:kraken:ethusd']) +
+              ' ETC' + Math.floor(result['market:kraken:etcusd']) +
+              ' LTC' + Math.floor(result['market:kraken:ltcusd']) +
+              ' ZEC' + Math.floor(result['market:kraken:zecusd']);
           background.printPattern(0, w, h - 7);
           print(0, h - 7, marketString);
         } catch (e) {

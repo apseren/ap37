@@ -9,7 +9,7 @@
     h = ap37.getScreenHeight();
 
     background.init();
-    print(0, 0, 'ap37-c504d3a0');
+    print(0, 0, 'ap37-6af843a4');
     time.init();
     battery.init();
     notifications.init();
@@ -227,12 +227,12 @@
         try {
           var result = JSON.parse(response).result,
             marketString =
-              'BTC' + Math.floor(result['kraken:btcusd']) +
-              ' BCH' + Math.floor(result['kraken:bchusd']) +
-              ' ETH' + Math.floor(result['kraken:ethusd']) +
-              ' ETC' + Math.floor(result['kraken:etcusd']) +
-              ' LTC' + Math.floor(result['kraken:ltcusd']) +
-              ' ZEC' + Math.floor(result['kraken:zecusd']);
+              'BTC' + Math.floor(result['market:kraken:btcusd']) +
+              ' BCH' + Math.floor(result['market:kraken:bchusd']) +
+              ' ETH' + Math.floor(result['market:kraken:ethusd']) +
+              ' ETC' + Math.floor(result['market:kraken:etcusd']) +
+              ' LTC' + Math.floor(result['market:kraken:ltcusd']) +
+              ' ZEC' + Math.floor(result['market:kraken:zecusd']);
           background.printPattern(0, w, h - 7);
           print(0, h - 7, marketString);
         } catch (e) {
@@ -249,24 +249,25 @@
   var transmissions = {
     list: [],
     update: function () {
-      get('https://dangeru.us/api/v2/board/cyb', function (response) {
+      get('https://hacker-news.firebaseio.com/v0/beststories.json', function (response) {
         try {
           var result = JSON.parse(response),
             line = h - 4,
             t = transmissions;
           t.list = [];
-          for (var i = 0; i < result.length && t.list.length < 3; i++) {
-            if (!result[i].sticky) {
+          for (var i = 0; i < result.length && i < 3; i++) {
+            get('https://hacker-news.firebaseio.com/v0/item/' + result[i] + '.json', function (itemResponse) {
+              var itemResult = JSON.parse(itemResponse);
               var transmission = {
-                title: result[i].title,
-                url: 'https://dangeru.us/cyb/thread/' + result[i].post_id,
+                title: itemResult.title,
+                url: itemResult.url,
                 y: line
               };
               t.list.push(transmission);
               background.printPattern(0, w, line);
               t.printTransmission(transmission, false);
               line++;
-            }
+            });
           }
         } catch (e) {
         }

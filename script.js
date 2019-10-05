@@ -440,5 +440,3 @@
 })();
 
 // pull requests github.com/apseren/ap37
-// btc donations 1MvZ1VsC2eCHv8DFfUNk474ipNcqWmpV93
-// eth donations 0x736F85B150eF7f75ba1F8729912e950BF22014d4

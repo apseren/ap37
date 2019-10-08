@@ -9,7 +9,7 @@
     h = ap37.getScreenHeight();
 
     background.init();
-    print(0, 0, 'ap37-6af843a4');
+    print(0, 0, 'ap37-2a9f58c3');
     time.init();
     battery.init();
     notifications.init();
@@ -249,7 +249,7 @@
   var transmissions = {
     list: [],
     update: function () {
-      get('https://hacker-news.firebaseio.com/v0/beststories.json', function (response) {
+      get('https://hacker-news.firebaseio.com/v0/topstories.json', function (response) {
         try {
           var result = JSON.parse(response),
             line = h - 4,

@@ -223,16 +223,16 @@
 
   var markets = {
     update: function () {
-      get('https://api.cryptowat.ch/markets/prices', function (response) {
+      get('https://api.kraken.com/0/public/Ticker?pair=' +
+        'XBTUSD,ETHUSD,ETCUSD,LTCUSD,ZECUSD', function (response) {
         try {
           var result = JSON.parse(response).result,
             marketString =
-              'BTC' + Math.floor(result['market:kraken:btcusd']) +
-              ' BCH' + Math.floor(result['market:kraken:bchusd']) +
-              ' ETH' + Math.floor(result['market:kraken:ethusd']) +
-              ' ETC' + Math.floor(result['market:kraken:etcusd']) +
-              ' LTC' + Math.floor(result['market:kraken:ltcusd']) +
-              ' ZEC' + Math.floor(result['market:kraken:zecusd']);
+              'BTC' + Math.floor(result.XXBTZUSD.c[0]) +
+              ' ETH' + Math.floor(result.XETHZUSD.c[0]) +
+              ' ETC' + Math.floor(result.XETCZUSD.c[0]) +
+              ' LTC' + Math.floor(result.XLTCZUSD.c[0]) +
+              ' ZEC' + Math.floor(result.XZECZUSD.c[0]);
           background.printPattern(0, w, h - 7);
           print(0, h - 7, marketString);
         } catch (e) {

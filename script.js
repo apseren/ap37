@@ -105,7 +105,8 @@
         name = name.substring(0, length) + "... +" +
           (notifications.list.length - 3);
       }
-      print(0, notification.y, name, highlight ? '#ff3333' : '#ffffff');
+      print(0, notification.y, name,
+        highlight ? '#ff3333' : '#ffffff');
       if (highlight) {
         setTimeout(function () {
           notifications.printNotification(notification, false);
@@ -120,7 +121,8 @@
       if (notifications.active) {
         for (var i = 0; i < notifications.list.length; i++) {
           if (notifications.list[i].y === y) {
-            notifications.printNotification(notifications.list[i], true);
+            notifications.printNotification(
+              notifications.list[i], true);
             ap37.openNotification(notifications.list[i].id);
             return;
           }
@@ -249,29 +251,31 @@
   var transmissions = {
     list: [],
     update: function () {
-      get('https://hacker-news.firebaseio.com/v0/topstories.json', function (response) {
-        try {
-          var result = JSON.parse(response),
-            line = h - 4,
-            t = transmissions;
-          t.list = [];
-          for (var i = 0; i < result.length && i < 3; i++) {
-            get('https://hacker-news.firebaseio.com/v0/item/' + result[i] + '.json', function (itemResponse) {
-              var itemResult = JSON.parse(itemResponse);
-              var transmission = {
-                title: itemResult.title,
-                url: itemResult.url,
-                y: line
-              };
-              t.list.push(transmission);
-              background.printPattern(0, w, line);
-              t.printTransmission(transmission, false);
-              line++;
-            });
+      get('https://hacker-news.firebaseio.com/v0/topstories.json',
+        function (response) {
+          try {
+            var result = JSON.parse(response),
+              line = h - 4,
+              t = transmissions;
+            t.list = [];
+            for (var i = 0; i < result.length && i < 3; i++) {
+              get('https://hacker-news.firebaseio.com/v0/item/' +
+                result[i] + '.json', function (itemResponse) {
+                var itemResult = JSON.parse(itemResponse);
+                var transmission = {
+                  title: itemResult.title,
+                  url: itemResult.url,
+                  y: line
+                };
+                t.list.push(transmission);
+                background.printPattern(0, w, line);
+                t.printTransmission(transmission, false);
+                line++;
+              });
+            }
+          } catch (e) {
           }
-        } catch (e) {
-        }
-      });
+        });
     },
     printTransmission: function (transmission, highlight) {
       print(0, transmission.y, transmission.title,
@@ -291,7 +295,8 @@
       for (var i = 0; i < transmissions.list.length; i++) {
         if (transmissions.list[i].y === y &&
           x <= transmissions.list[i].title.length) {
-          transmissions.printTransmission(transmissions.list[i], true);
+          transmissions.printTransmission(
+            transmissions.list[i], true);
           ap37.openLink(transmissions.list[i].url);
           return;
         }

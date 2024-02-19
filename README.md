@@ -38,7 +38,8 @@ ap37.getScreenHeight(); // returns a number
 ```
 
 ### getDate()
-Returns the current date. Useful to avoid Android WebView timezone bug: https://bugs.chromium.org/p/chromium/issues/detail?id=520783 
+Returns the current date.
+> Useful to avoid Android WebView timezone bug: https://bugs.chromium.org/p/chromium/issues/detail?id=520783 
 ```javascript
 ap37.getDate(); // returns an object: {year: 2018, month: 7, day: 12, hour: 1, minute: 2, second: 49}
 ```
@@ -52,7 +53,7 @@ ap37.getBatteryLevel(); // returns a number
 ### getApps()
 Returns the list of currently installed apps.
 ```javascript
-ap37.getApps(); // returns an array: [{id: 0, name: "Alarm", ...}]
+ap37.getApps(); // returns an array: [{id: 0, name: "Alarm"}, ...]
 ```
 
 ### openApp(appId)
@@ -88,9 +89,22 @@ ap37.requestNotificationsPermission();
 ```
 
 ### getNotifications()
-Retrieves the list of current notifications. This will fail if the user has not accepted the request to access the device notifications.
+Retrieves the list of current notifications. 
+> This method will fail if the user has not yet accepted the request to access the device notifications.
+> Each notification includes the appId that indicates which app from the list returned by ap37.getApps() it belongs to.
+> The appId value will be -1 for apps not set to be visible in the launcher, for example system apps.
 ```javascript
-ap37.getNotifications(); // returns an array: [{id: 0, name: "New message", ...}]
+ap37.getNotifications(); // returns an array: [{id: 0, appId: 0, name: "New message"}, ...]
+```
+
+### getNotificationGroups()
+Retrieves the list of current notifications grouped by app, including the amount of current active notifications for each app.
+If a notification has a count above 1, its name property will be the name of the app instead of the notification text.
+> This method will fail if the user has not yet accepted the request to access the device notifications.
+> Each notification includes the appId that indicates which app from the list returned by ap37.getApps() it belongs to.
+> The appId value will be -1 for apps not set to be visible in the launcher, for example system apps.
+```javascript
+ap37.getNotificationGroups(); // returns an array: [{id: 0, appId: 0, name: "Alarm", count: 2}, ...]
 ```
 
 ### openNotification(notificationId)

@@ -78,10 +78,12 @@
   var notifications = {
     list: [],
     active: false,
+    group: false,
     update: function () {
       notifications.active = ap37.notificationsActive();
       if (notifications.active) {
-        var nots = ap37.getNotifications();
+        var nots = notifications.group ?
+          ap37.getNotificationGroups() : ap37.getNotifications();
         notifications.list = nots;
         for (var i = 0; i < 3; i++) {
           var y = i + 2;
@@ -100,6 +102,9 @@
     },
     printNotification: function (notification, highlight) {
       var name = notification.name;
+      if (notifications.group && notification.count > 1) {
+        name += ' [' + notification.count + ']';
+      }
       if (notification.ellipsis) {
         var length = Math.min(name.length, w - 10);
         name = name.substring(0, length) + "... +" +

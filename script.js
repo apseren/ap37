@@ -112,11 +112,6 @@
       }
       print(0, notification.y, name,
         highlight ? '#ff3333' : '#ffffff');
-      if (highlight) {
-        setTimeout(function () {
-          notifications.printNotification(notification, false);
-        }, 1000);
-      }
     },
     init: function () {
       ap37.setOnNotificationsListener(notifications.update);
@@ -129,6 +124,9 @@
             notifications.printNotification(
               notifications.list[i], true);
             ap37.openNotification(notifications.list[i].id);
+            setTimeout(function () {
+              notifications.update();
+            }, 1000);
             return;
           }
         }

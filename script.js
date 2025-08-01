@@ -1,8 +1,16 @@
+/*
+ Welcome to ap37, a text-based launcher that allows changing
+   its source code from inside the launcher itself at runtime.
+ Hint: try changing the ap37.setTextSize(11) line below to
+   ap37.setTextSize(14) and press save at the top right.
+*/
+
 (function script() {
   'use strict';
   var w, h, c;
 
   function init() {
+
     ap37.setTextSize(11);
 
     w = ap37.getScreenWidth();
@@ -449,4 +457,4 @@
   init();
 })();
 
-// pull requests github.com/apseren/ap37
+// API docs at: https://github.com/apseren/ap37

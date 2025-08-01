@@ -31,10 +31,17 @@ ap37.setTextSize(11);
 ```
 
 ### getScreenWidth() and getScreenHeight()
-Returns the number of character that fit on the screen horizontally and vertically.
+Returns the number of characters that fit on the screen horizontally and vertically.
 ```javascript
 ap37.getScreenWidth(); // returns a number
 ap37.getScreenHeight(); // returns a number
+```
+
+### getCornersWidth() and getCornersHeight()
+Returns the device screen corners sizes based on the width and height of each character.
+```javascript
+ap37.getCornersWidth(); // returns a number
+ap37.getCornersHeight(); // returns a number
 ```
 
 ### getDate()

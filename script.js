@@ -1,22 +1,23 @@
 (function script() {
   'use strict';
-  var w, h;
+  var w, h, c;
 
   function init() {
     ap37.setTextSize(11);
 
     w = ap37.getScreenWidth();
     h = ap37.getScreenHeight();
+    c = ap37.getCornersWidth();
 
     background.init();
-    print(0, 0, 'ap37-2a9f58c3');
+    print(c, 0, 'ap37-7e5a32b1');
     time.init();
     battery.init();
     notifications.init();
     apps.init();
     markets.init();
     transmissions.init();
-    print(w - 3, h - 1, 'EOF');
+    print(w - c - 3, h - 1, 'EOF');
 
     ap37.setOnTouchListener(function (x, y) {
       notifications.onTouch(x, y);
@@ -56,7 +57,7 @@
       var time = d.year +
         leftPad(d.month, 2, '0') + leftPad(d.day, 2, '0') + ' ' +
         leftPad(d.hour, 2, '0') + leftPad(d.minute, 2, '0');
-      print(w - 13, 0, time);
+      print(w - c - 13, 0, time);
     },
     init: function () {
       time.update();
@@ -66,7 +67,7 @@
 
   var battery = {
     update: function () {
-      print(w - 17, 0,
+      print(w - c - 17, 0,
         leftPad(ap37.getBatteryLevel(), 3, ' '));
     },
     init: function () {
@@ -97,7 +98,7 @@
           }
         }
       } else {
-        print(0, 3, 'Activate notifications');
+        print(c / 2, 3, 'Activate notifications');
       }
     },
     printNotification: function (notification, highlight) {
@@ -106,11 +107,11 @@
         name += ' [' + notification.count + ']';
       }
       if (notification.ellipsis) {
-        var length = Math.min(name.length, w - 10);
+        var length = Math.min(name.length, w - c / 2 - 10);
         name = name.substring(0, length) + "... +" +
           (notifications.list.length - 3);
       }
-      print(0, notification.y, name,
+      print(c / 2, notification.y, name,
         highlight ? '#ff3333' : '#ffffff');
     },
     init: function () {
@@ -281,7 +282,7 @@
         });
     },
     printTransmission: function (transmission, highlight) {
-      print(0, transmission.y, transmission.title,
+      print(c / 2, transmission.y, transmission.title,
         highlight ? '#ff3333' : '#ffffff');
       if (highlight) {
         setTimeout(function () {
@@ -290,7 +291,7 @@
       }
     },
     init: function () {
-      print(0, h - 5, '// Transmissions');
+      print(c / 2, h - 5, '// Transmissions');
       transmissions.update();
       setInterval(transmissions.update, 3600000);
     },
@@ -393,7 +394,7 @@
       }
     },
     onTouch: function (x, y) {
-      if (x > w - 6 && y > h - 4) {
+      if (x > w - c - 6 && y > h - 4) {
         lineGlitch.active = !lineGlitch.active;
         if (lineGlitch.active) {
           lineGlitch.intervalId = setInterval(lineGlitch.update, 200);

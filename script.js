@@ -39,6 +39,7 @@
   // modules
 
   var background = {
+    enabled: true,
     buffer: [],
     bufferColors: [],
     pattern: '',
@@ -47,8 +48,17 @@
         background.pattern.substring(y * w + x0, y * w + xf),
         '#333333');
     },
+    saveBuffer: function (x, y, text, color) {
+      if (background.pattern !== null) {
+        background.buffer[y] = background.buffer[y].substr(0, x) + text +
+          background.buffer[y].substr(x + text.length);
+        for (var i = x; i < x + text.length; i++) {
+          background.bufferColors[y][i] = color;
+        }
+      }
+    },
     init: function () {
-      background.pattern = rightPad(script, h * w, ' ');
+      background.pattern = rightPad(background.enabled ? script : '', h * w, ' ');
 
       for (var i = 0; i < h; i++) {
         background.buffer.push(background.pattern.substr(i * w, w));
@@ -416,11 +426,7 @@
 
   function print(x, y, text, color) {
     color = color || '#ffffff';
-    background.buffer[y] = background.buffer[y].substr(0, x) + text +
-      background.buffer[y].substr(x + text.length);
-    for (var i = x; i < x + text.length; i++) {
-      background.bufferColors[y][i] = color;
-    }
+    background.saveBuffer(x, y, text, color);
     ap37.print(x, y, text, color);
   }
 

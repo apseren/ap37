@@ -150,8 +150,9 @@
     lineHeight: 2,
     topMargin: 6,
     bottomMargin: 8,
+    minAppWidth: 6,
+    appWidth: 0,
     lines: 0,
-    appWidth: 6,
     appsPerLine: 0,
     appsPerPage: 0,
     currentPage: 0,
@@ -194,8 +195,8 @@
       apps.appWidth = Math.floor(w / apps.appsPerLine);
 
       // check minimum app name length
-      if (apps.appWidth < 6) {
-        apps.appWidth = 6;
+      if (apps.appWidth < apps.minAppWidth) {
+        apps.appWidth = apps.minAppWidth;
         apps.appsPerLine = Math.floor(w / apps.appWidth);
         apps.isNextPageButtonVisible = true;
         print(w - 4, h - 9, '>>>');
